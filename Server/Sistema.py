@@ -22,8 +22,9 @@ class Sistema:
             sleep(15)
             self.updateValues()
             if self.regar == True:
-                if(self.currenthumidity >= self.humidityMax):
+                if(self.currenthumidity >= (self.humidityMax-self.humidityMin)):
                     self.regar = False
+                
             elif(self.currenthumidity <= self.humidityMin):
                 self.regar = True
                 

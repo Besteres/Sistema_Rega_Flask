@@ -1,26 +1,32 @@
 <!DOCTYPE html>
+<head>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
+</head>
 <div>
     <div id="HumidadeSensor">
         <div>
             Valor Da Humidade Atual
         </div>
-        <div>
+        <div id ="ValorHumidade">
             50%
         </div>
+    </div>
+    <div id="EstadoRega">
+        Estado de rega: A regar/A não regar
     </div>
     <div id="Temperatura">
         <div>
             Temperatura Atual
         </div>
-        <div>
+        <div id="ValorTemperatura">
             20Cº
         </div>
 
         <div>
             Local do Sistema:
         </div>
-        <div>
-            Oliveira Do Hospital
+        <div id="Nome do Local">
+            CITYNAME
         </div>
     </div>
 
@@ -37,22 +43,60 @@
         <div>
             Condições de atuação
         </div>
-        <div>
+        <div id="ValorIdealHum">
             Valor Ideal: 30%
         </div>
-        <div>
+        <div id="IntervaloVar">
             Intervalo de variacao: [15-40]%
         </div>
     </div>
 
-    <div id="Opcoes">
+    <div id="OpcoesCidade">
         <div>
-            Opções do Sistema
+            Mudar Local
         </div>
-        <button>Settings</button>
+        <input type="text" id="NomeCidade">
+        <button id="ButtonSettings">Settings</button>
 
     </div>
 
 
 
 </div>
+
+
+<script type="text/javascript">
+    const socket = io({autoConnect: false});
+    socket.connect();
+    res = socket.emit("getAllValues");
+
+    socket.on("Values",function(data){
+        document.getElementById("ValorHumidade").innerText = data["Humidade"] + "%";
+        document.getElementById("ValorTemperatura").innerText = data["Temperatura"] + "Cº";
+    });
+    socket.on("CityValues",function(data){
+        document.getElementById("Nome do Local").innerText = data["CityName"];
+    });
+    socket.on("RuleValues",function(data){
+        document.getElementById("ValorIdealHum").innerText = "Valor Ideal: " + (data["Max"] - data["Min"]) + "%";
+        document.getElementById("IntervaloVar").innerText = "Intervalo de variacao: [" + data["Min"] + "-" + data["Max"] + "]%";
+    });
+
+
+    document.getElementById("ButtonSettings").addEventListener("click",function (){
+        socket.emit("ChangeCidade",document.getElementById("NomeCidade").value);
+
+        document.getElementById("NomeCidade").value = "";
+    });
+
+    socket.on("CidadeMudada",function(data){
+        if(data == true){
+            console.log("Cidade mudada com sucesso");
+            socket.emit("UpdateCidade");
+        }
+        else{
+            console.log("Erro a mudar cidade");
+        }
+    })
+    
+</script>

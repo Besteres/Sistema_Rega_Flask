@@ -34,6 +34,7 @@ class Sistema:
     def getCityValues(self):
         print("Current City Code: " + self.temp.city)
         return {"CityName": self.cityname, "CityCode": self.temp.city}
+    
     def updateValues(self):
         self.currenttemperature = self.temp.updateTemp()
         self.currenthumidity = self.sensor.valorHumidade()

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Atmospheric</h1>
+</div>
+<div class="row">
+    <div class="col">
+        <canvas id="atmChart" style="width:100%;height:400px;"></canvas>
+    </div>
+    <div class="col-4">
+        <dl class="row mt-4">
+            <dt class="col-6">
+                Humidity
+            </dt>
+            <dd class="col-6" id="humidity"></dd>
+
+            <dt class="col-6">
+                Temperature
+            </dt>
+            <dd class="col-6" id="tempf"></dd>
+
+            <dt class="col-6">
+                Pressure
+            </dt>
+            <dd class="col-6" id="pressure"></dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Wind</h1>
+</div>
+<div class="row">
+    <div class="col">
+        <canvas id="windChart" style="width:100%;height:400px;"></canvas>
+    </div>
+    <div class="col-4">
+        <dl class="row mt-4">
+            <dt class="col-6">Inst direction</dt>
+            <dd class="col-6" id="windir"></dd>
+
+            <dt class="col-6">Inst Speed</dt>
+            <dd class="col-6" id="windspeed"></dd>
+
+            <dt class="col-6">Avg Direction (2min)</dt>
+            <dd class="col-6" id="winddiravg2"></dd>
+
+            <dt class="col-6">Avg Speed (2min)</dt>
+            <dd class="col-6" id="windspdavg2"></dd>
+
+            <dt class="col-6">Avg Direction (10min)</dt>
+            <dd class="col-6" id="windgustdir10m"></dd>
+            
+            <dt class="col-6">Avg Speed (10min)</dt>
+            <dd class="col-6" id="windgustspd10m"></dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Rain</h1>
+</div>
+<div class="row">
+    <div class="col">
+        <canvas id="rainChart" style="width:100%;height:400px;"></canvas>
+    </div>
+    <div class="col-4">
+        <dl class="row mt-4">
+            <dt class="col-6">Last hour</dt>
+            <dd class="col-6" id="rainin"></dd>
+
+            <dt class="col-6">Last 24 hours</dt>
+            <dd class="col-6" id="dailyrainin"></dd>
+        </dl>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+    <script>
+        var socket = io('http://' + document.domain + ':' + location.port);
+        
+        
+
+        socket.on('data_update', function (data) {
+            data = JSON.parse(data);
+
+            $('#windir').html(data.winddir + 'º');
+            $('#windspeed').html(data.windspeedmph + 'mph');
+            $('#windgustdir').html(data.windgustdir + 'º');
+            $('#windspdavg2').html(data.windspdmph_avg2m + 'mph');
+            $('#winddiravg2').html(data.winddir_avg2m + 'º');
+            $('#windgustspd10m').html(data.windgustmph_10m + 'mph');
+            $('#windgustdir10m').html(data.windgustdir_10m + 'º');
+
+            $('#humidity').html(data.humidity + '%RH');
+            $('#tempf').html(data.tempf + 'ºF');
+            $('#pressure').html(data.pressure + 'Pa');
+
+            $('#rainin').html(data.rainin + 'in');
+            $('#dailyrainin').html(data.dailyrainin + 'in');
+
+            windChart.data.datasets[0].data.push(data.windspeedmph);
+            windChart.data.datasets[1].data.push(data.winddir);
+            windChart.data.labels.push(moment().format('hh:mm:ss'));
+
+            atmChart.data.datasets[0].data.push(data.tempf);
+            atmChart.data.datasets[1].data.push(data.humidity);
+            atmChart.data.labels.push(moment().format('hh:mm:ss'));
+
+            rainChart.data.datasets[0].data.push(data.tempf);
+            rainChart.data.labels.push(moment().format('hh:mm:ss'));
+
+            if (atmChart.data.datasets[0].data.length > 60) {
+                windChart.data.datasets[0].data.shift();
+                windChart.data.datasets[1].data.shift();
+                windChart.data.labels.shift();
+
+                atmChart.data.datasets[0].data.shift();
+                atmChart.data.datasets[1].data.shift();
+                atmChart.data.labels.shift();
+
+                rainChart.data.datasets[0].data.shift();
+                rainChart.data.labels.shift();
+            }
+
+            windChart.update();
+            atmChart.update();
+            rainChart.update();
+        });
+
+    </script>
+{% endblock %}

@@ -93,8 +93,9 @@ class AccuWeather:
                 self.timeremaining = r.headers.get("RateLimit-Remaining")
                 self.currtemperature = r.json()[0]["Temperature"]["Metric"]["Value"]
                 self.__updateCityName()
-            except:
+            except Exception as e:
                 print("There was an error changing")
+                print(e)
                 return False
             
             with open(self.citykeyfile,"w") as file:

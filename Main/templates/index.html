@@ -1,68 +1,87 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
-
 <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Atmospheric</h1>
+    <h1 class="h2">System Info</h1>
 </div>
 <div class="row">
-    <div class="col">
-        <canvas id="atmChart" style="width:100%;height:400px;"></canvas>
-    </div>
-    <div class="col-4">
+    <div class="col-6">
         <dl class="row mt-4">
-            <dt class="col-6">
-                Humidity
-            </dt>
+            <dt class="col-6">Cidade Selecionada</dt>
+            <dd class="col-6" id="cityname"></dd>
+
+            <dt class="col-6">Estado de Rega</dt>
+            <dd class="col-6" id="estadorega"></dd>
+
+            <dt class="col-6">Probabilidade de precipitacao</dt>
+            <dd class="col-6" id="raininfo"></dd>
+
+            <dt class="col-6">Valor de precipitacao máximo para perimitir rega (no valor idea)</dt>
+            <dd class="col-6" id="precipicatacaoinfo"></dd>
+
+            <dt class="col-6">Humidade</dt>
             <dd class="col-6" id="humidity"></dd>
 
-            <dt class="col-6">
-                Temperature
-            </dt>
-            <dd class="col-6" id="tempf"></dd>
-
-            <dt class="col-6">
-                Pressure
-            </dt>
-            <dd class="col-6" id="pressure"></dd>
-        </dl>
-    </div>
-</div>
-
-<div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Wind</h1>
-</div>
-<div class="row">
-    <div class="col">
-        <canvas id="windChart" style="width:100%;height:400px;"></canvas>
-    </div>
-    <div class="col-4">
-        <dl class="row mt-4">
-            <dt class="col-6">Inst direction</dt>
-            <dd class="col-6" id="windir"></dd>
-
-            <dt class="col-6">Inst Speed</dt>
-            <dd class="col-6" id="windspeed"></dd>
-
-            <dt class="col-6">Avg Direction (2min)</dt>
-            <dd class="col-6" id="winddiravg2"></dd>
-
-            <dt class="col-6">Avg Speed (2min)</dt>
-            <dd class="col-6" id="windspdavg2"></dd>
-
-            <dt class="col-6">Avg Direction (10min)</dt>
-            <dd class="col-6" id="windgustdir10m"></dd>
+            <dt class="col-6">Humidade Min</dt>
+            <dd class="col-6" id="ruleMin"></dd>
             
-            <dt class="col-6">Avg Speed (10min)</dt>
-            <dd class="col-6" id="windgustspd10m"></dd>
+            <dt class="col-6">Humidade Max</dt>
+            <dd class="col-6" id="ruleMax"></dd>
+
+            <dt class="col-6">Predicao Atual</dt>
+            <dd class="col-6" id="predictioninfo"></dd>
+            
         </dl>
     </div>
 </div>
 
 <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Rain</h1>
+    <h1 class="h2">Definicoes Sistema</h1>
 </div>
 <div class="row">
+    <div class="col-6">
+        <dl class="row mt-4">
+            <dt class="col-6">
+                Mudar Cidade
+            </dt>
+            <dd class="col-6">
+                <input type="text" id="NomeCidade" placeholder="Oliveira Do Hospital">
+                <button id="CidadeSettings">Mudar Cidade</button>
+            </dd>
+            
+
+            <dt class="col-6">
+                Limites Humidade
+            </dt>
+            <dd class="col-6">
+                <div>Minimo</div>
+                <input type="text" id="MinimoHumidadeInput" placeholder="40">
+                <div>Máximo</div>
+                <input type="text" id="MaximoHumidadeInput" placeholder="60">
+                <button id="HumidadeSettings">Mudar Limites Humidade</button>
+            </dd>
+            <dt class="col-6">
+                Precipitacao
+            </dt>
+            <dd class="col-6">
+                <div>Chance de precipitacao máxima para permitir rega</div>
+                <input type="text" id="PrecipitacaoVal" placeholder="50">
+                <button id="PrecipitSettings">Mudar Condicoes</button>
+            </dd>
+
+
+
+        </dl>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Rain</h1>
+    </div>
     <div class="col">
         <canvas id="rainChart" style="width:100%;height:400px;"></canvas>
     </div>
@@ -88,26 +107,50 @@
     <script>
         var socket = io('http://' + document.domain + ':' + location.port);
         
+        document.getElementById("CidadeSettings").addEventListener("click", function(){
+            socket.emit("ChangeCidade",document.getElementById("NomeCidade").value);
+            document.getElementById("NomeCidade").value = "";
+        });
+        document.getElementById("HumidadeSettings").addEventListener("click",function(){
+            socket.emit("ChangeHumidade",{"Min": document.getElementById("MinimoHumidadeInput").value,"Max":document.getElementById("MaximoHumidadeInput").value})
+            document.getElementById("MinimoHumidadeInput").value = "";
+            document.getElementById("MaximoHumidadeInput").value = "";
+        });
+
+        document.getElementById("PrecipitSettings").addEventListener("click",function(){
+            socket.emit("ChangePrecipitacao",document.getElementById("PrecipitacaoVal").value)
+            document.getElementById("PrecipitacaoVal").value = "";
+        });
         
 
         socket.on('data_update', function (data) {
             data = JSON.parse(data);
 
-            $('#windir').html(data.winddir + 'º');
-            $('#windspeed').html(data.windspeedmph + 'mph');
-            $('#windgustdir').html(data.windgustdir + 'º');
-            $('#windspdavg2').html(data.windspdmph_avg2m + 'mph');
-            $('#winddiravg2').html(data.winddir_avg2m + 'º');
-            $('#windgustspd10m').html(data.windgustmph_10m + 'mph');
-            $('#windgustdir10m').html(data.windgustdir_10m + 'º');
+            $('#cityname').html(data.CityName);
 
-            $('#humidity').html(data.humidity + '%RH');
-            $('#tempf').html(data.tempf + 'ºF');
-            $('#pressure').html(data.pressure + 'Pa');
+            $('#estadorega').html(data.EstadoRega.toString());
 
-            $('#rainin').html(data.rainin + 'in');
-            $('#dailyrainin').html(data.dailyrainin + 'in');
+            $('#raininfo').html(data.raininfo + '%');
 
+            $('#humidity').html(data.moisture + '%RH');
+
+            $('#ruleMin').html(data.Rules.Min + '% Min');
+
+            $('#ruleMax').html(data.Rules.Max + '% Max');
+
+            $('#precipicatacaoinfo').html(data.PrecMax + "%");
+
+            if(data.Predicion != undefined){
+            $('#predictioninfo').html(data.Predicion);
+            }
+            else{
+                $('#predictioninfo').html("Por agora não há previsão nenhuma");
+            }
+
+
+
+
+/*
             windChart.data.datasets[0].data.push(data.windspeedmph);
             windChart.data.datasets[1].data.push(data.winddir);
             windChart.data.labels.push(moment().format('hh:mm:ss'));
@@ -135,6 +178,7 @@
             windChart.update();
             atmChart.update();
             rainChart.update();
+            */
         });
 
     </script>

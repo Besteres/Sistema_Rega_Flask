@@ -33,6 +33,9 @@
             
         </dl>
     </div>
+    <div class="col-6">
+        <canvas id="HistoryChart"></canvas>
+    </div>
 </div>
 
 <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -80,18 +83,18 @@
 
 <div class="row">
     <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Rain</h1>
+        <h1 class="h2">Check History</h1>
     </div>
-    <div class="col">
-        <canvas id="rainChart" style="width:100%;height:400px;"></canvas>
+    <div class="col-6">
+        <canvas id="DayHistoryChart"></canvas>
     </div>
     <div class="col-4">
         <dl class="row mt-4">
             <dt class="col-6">Last hour</dt>
             <dd class="col-6" id="rainin"></dd>
 
-            <dt class="col-6">Last 24 hours</dt>
-            <dd class="col-6" id="dailyrainin"></dd>
+            <input type="date" id="DataHistoricoVal">
+            <button id="HistoricoSettings">Mudar Dia</button>
         </dl>
     </div>
 </div>
@@ -121,7 +124,81 @@
             socket.emit("ChangePrecipitacao",document.getElementById("PrecipitacaoVal").value)
             document.getElementById("PrecipitacaoVal").value = "";
         });
-        
+
+        document.getElementById("HistoricoSettings").addEventListener("click",function(){
+            socket.emit("ChangeHistorico",document.getElementById("DataHistoricoVal").value);
+        })
+        let labels = [];
+
+        let itemData = [];
+        const data_chart = {
+            labels: labels,
+            datasets: [{
+                data:itemData
+            }]
+        };
+        const config = {
+            type: 'line',
+            data: data_chart,
+            options: {
+                plugins:{
+                    legend:{
+                        display: false
+                    },
+                    title:{
+                        display: true,
+                        text: 'Histórico da sessão'
+                    }
+                }
+            }
+        }
+        let labels_h = [];
+
+        let itemData_h = [];
+        const data_chart_h = {
+            labels: labels_h,
+            datasets: [{
+                data:itemData_h
+            }]
+        };
+        const config_h = {
+            type: 'line',
+            data: data_chart_h,
+            options: {
+                plugins:{
+                    legend:{
+                        display: false
+                    },
+                    title:{
+                        display: true,
+                        text: 'Histórico do dia'
+                    }
+                }
+            }
+        }
+        var chart = new Chart(document.getElementById('HistoryChart'),config);
+        var historychart = new Chart(document.getElementById('DayHistoryChart'),config_h)
+
+        i = 0;
+        n = 0;
+
+        socket.on('historico_update',function(data){
+            let maxregists = 100
+            labels_h.length = 0;
+            itemData_h.length = 0;
+            data = JSON.parse(data);
+            console.log((parseInt((data.length/maxregists))-1))
+            for (let x = 0; x < data.length; x++) {
+                if(x % (parseInt((data.length/maxregists))-1) == 0){
+                console.log("Putting values in")
+                labels_h.push(data[x][2]);
+                itemData_h.push(data[x][1]);
+                }
+            }
+            historychart.update();
+            
+
+        });
 
         socket.on('data_update', function (data) {
             data = JSON.parse(data);
@@ -132,7 +209,7 @@
 
             $('#raininfo').html(data.raininfo + '%');
 
-            $('#humidity').html(data.moisture + '%RH');
+            $('#humidity').html(data.moisture.toFixed(2) + '%RH');
 
             $('#ruleMin').html(data.Rules.Min + '% Min');
 
@@ -146,39 +223,22 @@
             else{
                 $('#predictioninfo').html("Por agora não há previsão nenhuma");
             }
-
-
-
-
-/*
-            windChart.data.datasets[0].data.push(data.windspeedmph);
-            windChart.data.datasets[1].data.push(data.winddir);
-            windChart.data.labels.push(moment().format('hh:mm:ss'));
-
-            atmChart.data.datasets[0].data.push(data.tempf);
-            atmChart.data.datasets[1].data.push(data.humidity);
-            atmChart.data.labels.push(moment().format('hh:mm:ss'));
-
-            rainChart.data.datasets[0].data.push(data.tempf);
-            rainChart.data.labels.push(moment().format('hh:mm:ss'));
-
-            if (atmChart.data.datasets[0].data.length > 60) {
-                windChart.data.datasets[0].data.shift();
-                windChart.data.datasets[1].data.shift();
-                windChart.data.labels.shift();
-
-                atmChart.data.datasets[0].data.shift();
-                atmChart.data.datasets[1].data.shift();
-                atmChart.data.labels.shift();
-
-                rainChart.data.datasets[0].data.shift();
-                rainChart.data.labels.shift();
+            if(i % 5 == 0){
+            labels.push(n); // Add timestamps if needed
+            itemData.push(data.moisture.toFixed(2)); 
+            if (labels.length > 200) {
+                labels.shift();
+                itemData.shift();
             }
+            chart.update();
+            n++;
+            }
+            i++;
 
-            windChart.update();
-            atmChart.update();
-            rainChart.update();
-            */
+
+
+
+
         });
 
     </script>

@@ -6,16 +6,32 @@ import requests
 import os
 class Sistema:
     urlbase = ""
-    def __init__(self,key,citykey,cityname,timesremain,HumidityMin,HumidityMax,PrecipitationFile):
-        self.rain = AccuWeather(key=key,citykey_file=citykey,cityname_file=cityname,timesremaintoday=timesremain)
+    def __init__(self,key,citykey,cityname,HumidityMin,HumidityMax,PrecipitationFile):
+        self.rain = AccuWeather(key=key,citykey_file=citykey,cityname_file=cityname)
         self.cityname = self.rain.getCityName()
         self.sensor = Sensor()
-        self.humidityMin = HumidityMin
+        
         self.humidityMax = HumidityMax
         self.regar = False
 
         self.precipitationMax = 50
         self.precipitationFile = PrecipitationFile
+
+        self.humidityMinFile = HumidityMin
+        self.humidityMin = 40
+        if(os.path.exists(self.humidityMinFile)):
+            with open(self.humidityMinFile,"r") as file:
+                self.humidityMin = float(file.readline().strip())
+        else:
+            self.createFile(self.humidityMinFile,"40")
+
+        self.humidityMaxFile = HumidityMax
+        self.humidityMax = 60
+        if(os.path.exists(self.humidityMaxFile)):
+            with open(self.humidityMaxFile,"r") as file:
+                self.humidityMax = float(file.readline().strip())
+        else:
+            self.createFile(self.humidityMaxFile,"60")
 
         if(os.path.exists(self.precipitationFile)):
             with open(self.precipitationFile,"r") as file:
@@ -56,20 +72,30 @@ class Sistema:
                     self.regar = False
                 
 
-    def mudarIntervaloHumidade(self,data):
-        data["Min"] = float(data["Min"])
-        data["Max"] = float(data["Max"])
-        if(data["Min"] <= 0):
-            data["Min"] = 0
-        if(data["Max"] >= 100):
-            data["Max"] = 100
-        if(data["Max"] <= 0):
-            data["Max"] = 0
-        if(data["Min"] >= 100):
-            data["Min"] = 100
-        self.humidityMin = data["Min"]
-        self.humidityMax = data["Max"]
+    def mudarIntervaloHumidade(self,data,min,max):
+        if min:
+            data["Min"] = float(data["Min"])
+            if(data["Min"] <= 0):
+                data["Min"] = 0
+            if(data["Min"] >= 100):
+                data["Min"] = 100
+            self.humidityMin = data["Min"]
+            with open(self.humidityMinFile,"w") as file:
+                file.write(str(self.humidityMin))
 
+
+        if max:
+            data["Max"] = float(data["Max"])
+            
+            if(data["Max"] >= 100):
+                data["Max"] = 100
+            if(data["Max"] <= 0):
+                data["Max"] = 0
+            self.humidityMax = data["Max"]
+            with open(self.humidityMaxFile,"w") as file:
+                file.write(str(self.humidityMax))
+
+    
         
                 
     def getRuleValues(self):

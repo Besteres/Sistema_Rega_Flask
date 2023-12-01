@@ -24,13 +24,18 @@ def train_linear_model(data,min):
     print(datetime.datetime.fromtimestamp(y_predict[0]).strftime('%Y-%m-%d %H:%M:%S'))
     return y_predict[0]
 
-def getStoredDataToday():
+def getStoredDataDay(date):
     conn = db_connection()
     if conn == None:
         return
     cur = conn.cursor()
-    cur.execute("""SELECT * from get_data_for_day(%s,%s)""", (datetime.datetime.now().strftime('%Y-%m-%d'),False))
-    result = cur.fetchall()
+    cur.execute("""SELECT * from get_data_for_day(%s,%s)""", (date,False))
+    result = []
+    i = 0
+    for val in cur.fetchall():
+        result.append(list(val))
+        result[i][2] = result[i][2].strftime('%Y-%m-%d %H:%M:%S')
+        i = i+1
     cur.close()
     conn.close()
 

@@ -5,8 +5,8 @@ urlbase = "http://dataservice.accuweather.com"
 
 class AccuWeather:
     started = False
-    def __init__(self,key,citykey_file,cityname_file,timesremaintoday):
-        self.timeremaining = timesremaintoday
+    def __init__(self,key,citykey_file,cityname_file):
+        self.timeremaining = 50
         self.key = key
         self.citynamefile = cityname_file
         self.citykeyfile = citykey_file

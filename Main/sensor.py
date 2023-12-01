@@ -8,9 +8,9 @@ class Sensor:
 
     def updatevalorHumidade(self,regar):
         if random.uniform(0,100) <= regar:
-            self.prevvalue = self.prevvalue + 0.5
+            self.prevvalue = self.prevvalue + (0.5 * 0.1)
         else:
-            self.prevvalue = self.prevvalue - 0.75
+            self.prevvalue = self.prevvalue - (0.75 * 0.1)
 
 
         if self.prevvalue >= 100:

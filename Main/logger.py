@@ -21,7 +21,7 @@ class Logger(object):
     saveDB = True
     def __init__(self, filename='data.csv'):
         
-        self.sistema = Sistema(key=key,citykey="currentcityKey.txt",cityname="currentcityName.txt",HumidityMin="HumidityMin.txt",HumidityMax="HumidityMax.txt",PrecipitationFile="PrecipitationMax.txt")
+        self.sistema = Sistema(key=input("Insert your API key: "),citykey="currentcityKey.txt",cityname="currentcityName.txt",HumidityMin="HumidityMin.txt",HumidityMax="HumidityMax.txt",PrecipitationFile="PrecipitationMax.txt")
         #self.rain = AccuWeather(key=key,citykey_file="currentcityKey.txt",cityname_file="currentcityName.txt",timesremaintoday=50)
         self.sensor = Sensor()
         self.filename = filename

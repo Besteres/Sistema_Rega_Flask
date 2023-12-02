@@ -9,7 +9,7 @@ class Sistema:
     def __init__(self,key,citykey,cityname,HumidityMin,HumidityMax,PrecipitationFile):
         self.rain = AccuWeather(key=key,citykey_file=citykey,cityname_file=cityname)
         self.cityname = self.rain.getCityName()
-        self.sensor = Sensor()
+        self.sensor = Sensor() 
         
         self.humidityMax = HumidityMax
         self.regar = False
@@ -19,11 +19,12 @@ class Sistema:
 
         self.humidityMinFile = HumidityMin
         self.humidityMin = 40
+
         if(os.path.exists(self.humidityMinFile)):
             with open(self.humidityMinFile,"r") as file:
                 self.humidityMin = float(file.readline().strip())
         else:
-            self.createFile(self.humidityMinFile,"40")
+            self.createFile(self.humidityMinFile,"40") #Carregado o valor minimo de humidade
 
         self.humidityMaxFile = HumidityMax
         self.humidityMax = 60
@@ -31,16 +32,18 @@ class Sistema:
             with open(self.humidityMaxFile,"r") as file:
                 self.humidityMax = float(file.readline().strip())
         else:
-            self.createFile(self.humidityMaxFile,"60")
+            self.createFile(self.humidityMaxFile,"60") #Carregado o valor maximo de humidade
 
         if(os.path.exists(self.precipitationFile)):
             with open(self.precipitationFile,"r") as file:
                 self.precipitationMax = float(file.readline().strip())
         else:
-            self.createFile(self.precipitationFile,"50")
+            self.createFile(self.precipitationFile,"50") #Carregado o valor maximo de precipitacao
         
+        #Embora fazia sentido o sistema ter o logger aqui dentro, decidi seguir o codigo base e adaptar o meu codigo á volta do mesmo
 
         self.updateValues()
+
         self.daemon_thread = threading.Thread(target=self.SistemaLoop, name="values-thread", daemon=True)
         self.daemon_thread.start()
 
@@ -48,30 +51,34 @@ class Sistema:
         with open(path,"w") as file:
             file.write(cont)
 
-    def getCurrentMin(self):
-        if self.currentPrecipitation <= self.precipitationMax:
-            return self.humidityMax - ((self.humidityMax-self.humidityMin)/2)
+    def getCurrentMin(self): #O valor minimo onde uma rega pode começar varia muito dependente das regras definidas
+        if self.currentPrecipitation <= self.precipitationMax: 
+            return self.humidityMax - ((self.humidityMax-self.humidityMin)/2)#Quando o valor de precipitacao atual permite rega no valor ideal
         elif self.currentPrecipitation >= self.precipitationMax:
-            return self.humidityMin
+            return self.humidityMin #Quando o valor de precipitacao atual nao permite rega no valor ideal
+        
+    
     def SistemaLoop(self):
         while True:
             sleep(1)
-            self.updateValues()
+            self.updateValues()#Atualiza todos os valores atuais (precipitacao, humidade, etc)
 
-            if self.regar == False:
+            if self.regar == False: #Logica se nao estiver a regar
                 if self.currenthumidity <= self.humidityMin:
                     self.regar = True
                 elif self.currenthumidity <= self.humidityMax - ((self.humidityMax-self.humidityMin)/2) and self.currentPrecipitation <= self.precipitationMax:
                     self.regar = True
             
-            if self.regar == True:
-                #35 >= (60-40)
+            if self.regar == True: #Logica se estiver a regar
+                #os dois algoritmos sao diferentes pois num pode ser permitido regar ate ao maximo
+                #E noutro é so permitido ate ao valor ideal
                 if self.currenthumidity >= self.humidityMax - ((self.humidityMax-self.humidityMin)/2) and self.currentPrecipitation >= self.precipitationMax:
                     self.regar = False
                 elif self.currenthumidity >= self.humidityMax:
                     self.regar = False
                 
-
+    #Mudar definicoes de intervalo de humidades
+    #Argumentos min e max servem para dizer se é o maximo ou minimo que mudaram
     def mudarIntervaloHumidade(self,data,min,max):
         if min:
             data["Min"] = float(data["Min"])
@@ -105,23 +112,26 @@ class Sistema:
         print("Current City Code: " + self.rain.city)
         return {"CityName": self.cityname, "CityCode": self.rain.city}
     
+    #Carregam novos valores (se aplicavel) na memoria
+    #pois os valores sao buscados com getters
     def updateValues(self):
         self.currentPrecipitation = self.rain.getcurrentPrecProb()
         self.currenthumidity = self.sensor.valorHumidade()
 
-        #print(str(self.regar) + " " + str(self.currentPrecipitation >= 50))
         if self.currentPrecipitation != None:
-            value = (int(self.regar) * 100) + (self.currentPrecipitation / 1.5)
+            value = (int(self.regar) * 100) + (self.currentPrecipitation / 1.5) #Chance do valor de humidade subir calculada aqui
             self.sensor.updatevalorHumidade(value)
         else:
             self.sensor.updatevalorHumidade(int(self.regar) * 100)
-        #r = requests.post(url = Sistema.urlbase+"/uploadvalues",json={"Temperatura":self.currenttemperature,"Humidade":self.currenthumidity})
 
+    #Muda cidade e devolve novo valor (se mudado)
+    #Normalmente nao muda cidade quando o nome é incompreensivel ou ja nao ha mais chamadas API
     def mudarCidade(self,nomecidade):
         result = self.rain.changeCity(nomecidade)
         if result == True:
             self.cityname = self.rain.getCityName()
         return result
+    #Muda regras de precipitacao
     def mudarPrecipitacaoMax(self,data):
         data = float(data)
         if data >= 100:

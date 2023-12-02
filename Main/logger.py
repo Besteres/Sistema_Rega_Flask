@@ -74,7 +74,8 @@ class Logger(object):
         self.thr.daemon = True
         self.thr.start()
 
-        '''
+        ''' Trocado a funcao de guardar os dados num CSV para guardar os dados na base de dados
+        
         file_exists = os.path.isfile(self.filename)
         with open(self.filename, 'a') as f:
             writer = csv.DictWriter(f, fieldnames=data.keys())

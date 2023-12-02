@@ -12,10 +12,13 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'S3cr3t!'
 socket = SocketIO(app)
 
+#Unico uso de flask
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
+# Eventos de definicoes --
 @socket.on("ChangeCidade")
 def changeCidade(data):
     log.sistema.mudarCidade(data)
@@ -49,14 +52,16 @@ def changeHistorico(data):
     print(data)
     socket.emit('historico_update',json.dumps(pred_test.getStoredDataDay(data),default=json_util.default))
 
-def data_update(data):
+#------------------------------------
+
+#atualizar dados em qualquer página HTML com conexão com o socket
+def data_update(data): 
     print(data)
     socket.emit('data_update', json.dumps(data, default=json_util.default))
     
 
-
+#Aproveitar os eventos definidos no logger
 if __name__ == '__main__':
-    print("Imported")
     log = Logger()
     log.on_data_updated(data_update)
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=False) #O debug foi definido para false para o script correr uma só vez

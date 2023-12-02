@@ -43,7 +43,7 @@ def getStoredDataDay(date):
 
 def db_connection():
     try:
-        db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password="postgres")
+        db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password='EpicPassword123')
         return db
-    except:
-        print("Cant connect to postgres server... not saving")
+    except Exception as e:
+        print("Cant connect to postgres server... not saving " + e)

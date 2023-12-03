@@ -126,7 +126,7 @@
         });
 
         document.getElementById("HistoricoSettings").addEventListener("click",function(){
-            socket.emit("ChangeHistorico",document.getElementById("DataHistoricoVal").value);
+            socket.emit("ChangeHistorico",{"value" : document.getElementById("DataHistoricoVal").value, "clientID": socket.id});
         })
         let labels = [];
 
@@ -196,7 +196,6 @@
                 }
             }
             historychart.update();
-            
 
         });
 

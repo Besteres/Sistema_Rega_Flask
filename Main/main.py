@@ -50,7 +50,9 @@ def changePrecipitacao(data):
 @socket.on("ChangeHistorico")
 def changeHistorico(data):
     print(data)
-    socket.emit('historico_update',json.dumps(pred_test.getStoredDataDay(data),default=json_util.default))
+    if data["value"] != None and data["clientID"] != None:
+
+        socket.emit('historico_update',json.dumps(pred_test.getStoredDataDay(data["value"]),default=json_util.default),room=data["clientID"])
 
 #------------------------------------
 

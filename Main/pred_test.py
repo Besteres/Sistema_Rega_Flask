@@ -44,7 +44,7 @@ def getStoredDataDay(date):
 
     return result
 
-#Conexao a base de dados, antigamente usada para o algoritmo de previsão, agora só é usado para buscar históricos guardados
+#Conexao a base de dados, antigamente usada para o algoritmo de previsão, agora só é usado para buscar e guardar históricos guardados
 def db_connection():
     try:
         db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password='EpicPassword123')

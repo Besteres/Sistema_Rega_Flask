@@ -88,7 +88,7 @@ class Logger(object):
         if Logger.saveDB == False:
             return
         
-        conn = self.db_connection()
+        conn = pred_test.db_connection()
         if conn == None:
             return
         cur = conn.cursor()
@@ -104,11 +104,5 @@ class Logger(object):
     def on_data_updated(self, clb):
         self.clb = clb
 
-    def db_connection(self):
-        try:
-            db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password="EpicPassword123")
-            return db
-        except Exception as e:
-            print(e)
-            Logger.saveDB = False
+    
         

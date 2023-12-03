@@ -88,6 +88,8 @@ class AccuWeather:
         if self.timeremaining == 0:
             print("Ran out of times per day")
             return False
+        elif self.cityname == name:
+            return True
         try:
             r = requests.get(url=urlbase+"/locations/v1/cities/search?apikey="+self.key+"&q="+name)
             self.city = r.json()[0]["Key"]

@@ -127,7 +127,8 @@
 
         document.getElementById("HistoricoSettings").addEventListener("click",function(){
             socket.emit("ChangeHistorico",document.getElementById("DataHistoricoVal").value);
-        })
+        });
+
         let labels = [];
 
         let itemData = [];
@@ -178,10 +179,8 @@
         }
         var chart = new Chart(document.getElementById('HistoryChart'),config);
         var historychart = new Chart(document.getElementById('DayHistoryChart'),config_h)
-
         i = 0;
         n = 0;
-
         socket.on('historico_update',function(data){
             let maxregists = 100
             labels_h.length = 0;
@@ -224,7 +223,7 @@
                 $('#predictioninfo').html("Por agora não há previsão nenhuma");
             }
             if(i % 5 == 0){
-            labels.push(n); // Add timestamps if needed
+            labels.push(n);
             itemData.push(data.moisture.toFixed(2)); 
             if (labels.length > 200) {
                 labels.shift();

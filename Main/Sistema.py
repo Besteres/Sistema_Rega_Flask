@@ -101,9 +101,6 @@ class Sistema:
             self.humidityMax = data["Max"]
             with open(self.humidityMaxFile,"w") as file:
                 file.write(str(self.humidityMax))
-
-    
-        
                 
     def getRuleValues(self):
         return {"Min": self.humidityMin,"Max": self.humidityMax}
@@ -141,8 +138,6 @@ class Sistema:
         self.precipitationMax = data
         with open(self.precipitationFile,"w") as file:
             file.write(str(self.precipitationMax))
-
-
 
     def getCurrentValues(self):
         if(self.currenthumidity == None):

@@ -21,7 +21,6 @@ class Sensor:
         else:
             self.timessincechange = self.timessincechange + 1
 
-
         if self.prevvalue >= 100:
             self.prevvalue = 100
         elif self.prevvalue <= 0:

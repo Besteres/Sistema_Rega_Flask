@@ -39,30 +39,42 @@ class AccuWeather:
         return self.cityname
 
     def getcurrentPrecProb(self):
-        if self.raindata != None:
-            for data in self.raindata:
+        result = None
+        list_ = self.getRainStats()
+        if list_ != None:
+            for data in list_:
                 if datetime.strptime(data["DateTime"].split("T")[1].split("+")[0],"%H:%M:%S").hour == datetime.now().hour+1:
-                    return data["PrecipitationProbability"]
+                    result = data["PrecipitationProbability"]
                 #A partir dos dados carregados é buscado a chance de precipitacao da hora a seguir (a API devolve dados a partir da proxima hora atual)
-        return None
         
+        if result == None:
+            list_ = self.getRainStats(bypass=True)
+            if list_ != None:
+                for data in list_:
+                    if datetime.strptime(data["DateTime"].split("T")[1].split("+")[0],"%H:%M:%S").hour == datetime.now().hour+1:
+                        result = data["PrecipitationProbability"]
+        if result == None:        
+            print("There was an error getting precipitation data, probably ran out of API calls")
+        return result
+    
     #Dados da precipitacao são carregados a partir da API (proximas 12 horas)
-    def getRainStats(self):
-
-        if self.raindata != None:
-            if datetime.strptime(self.raindata[0]["DateTime"].split('T')[0],"%Y-%m-%d").day == datetime.now().day and self.getcurrentPrecProb() != None:
-                return self.raindata
-            elif self.timeremaining == 0:
-                return self.raindata 
+    def getRainStats(self,bypass=False):
+        while bypass == False:
+            if self.raindata != None:
+                if datetime.strptime(self.raindata[0]["DateTime"].split('T')[0],"%Y-%m-%d").day == datetime.now().day:
+                    return self.raindata
+                elif self.timeremaining == 0:
+                    return self.raindata
+            break 
             #Verificar se é preciso atualizar os dados atuais ou se podemos devolver os dados na memória
         
-
+        self.raindata = None
         try:
             r = requests.get(url = urlbase+"/forecasts/v1/hourly/12hour/"+self.city+"?apikey="+self.key)
             self.timeremaining = r.headers.get("RateLimit-Remaining")
             if r.status_code == 200:
                 self.raindata = r.json()
-            print("Updating RainCast... " + "Remaining updates: " + self.timeremaining)
+                print("Updating RainCast... " + "Remaining updates: " + self.timeremaining)
         except Exception as e:
             print(e)
         return self.raindata
@@ -101,11 +113,17 @@ class AccuWeather:
                 self.__updateCityName()
             except Exception as e:
                 print("There was an error changing")
+
                 print(e)
                 return False
             
             with open(self.citykeyfile,"w") as file:
                 file.write(self.city)
+            self.raindata = self.getRainStats(bypass=True) 
+
+            if self.raindata == None:
+                return False
+            
             return True
         except Exception as e:
             print("Error finding city, it probably doesnt exist")

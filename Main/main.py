@@ -38,7 +38,6 @@ def changeHumidade(data):
         print("There was no max given")
         max = False
 
-
     if min or max:
         log.sistema.mudarIntervaloHumidade(data,min,max)
 
@@ -51,7 +50,6 @@ def changePrecipitacao(data):
 def changeHistorico(data):
     print(data)
     if data["value"] != None and data["clientID"] != None:
-
         socket.emit('historico_update',json.dumps(pred_test.getStoredDataDay(data["value"]),default=json_util.default),room=data["clientID"])
 
 #------------------------------------

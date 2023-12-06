@@ -32,9 +32,9 @@ def db_connection():
         print(e)
 [...]
 ```
-Será necessário trocar estas definições para refletir a base de dados que vai ser usada.
+Será necessário trocar as definições nesta conexão para refletir a base de dados que vai ser usada.
 
-A estrutura da base de dados desenhada para este projeto estará disponivel em "Main/BackUp/code.sql"
+A estrutura da base de dados desenhada para este projeto estará disponivel no ficheiro "Main/BackUp/code.sql"
 
 
 ### Aplicação AccuWeather <a name="AplicaçãoAccuWeather"></a>
@@ -52,10 +52,10 @@ Ao criar uma aplicação com sucesso poderás ter acesso a uma chave API, que é
 
 
 ## Execução do código <a name="execucao"></a>
-Para o correto funcionamento do código foi criada um ambiente virtual python com todas as bibliotecas e a versão python usada para o desenvolvimento desta.
+Para o correto funcionamento do código foi criada um ambiente virtual python com todas as bibliotecas e a versão python usada para o desenvolvimento da mesma.
 
-Será necessário carregar este ambiente para garantir nenhum problema fora do ordinário.
-O seguinte comando é para ser executado numa terminal:
+Será necessário carregar este ambiente para garantir que nenhum problema fora do ordinário aconteça.
+O seguinte ficheiro é para ser executado numa terminal, basta inserir o seguinte:
 ```
 Main\LPVirtualEnv\Scripts\activate
 ```

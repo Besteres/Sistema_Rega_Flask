@@ -55,20 +55,35 @@ Uma imagem postgres será necessária para executar um container, existem vário
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/2772762f-9d62-4531-86c1-ef604f7db3c7" width="350" height="200">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/f397eedf-cacd-4a6e-bf72-2d545e509b53" width="350" height="200">
 </p>
-Após a sua instalação podemos começar um novo container ao fazer "run" desta imagem em "Images", com atenção aos parametros necessários para a sua inicialização:
+Após a sua instalação podemos começar um novo container ao fazer "run" desta imagem em "Images", com atenção aos parametros necessários para a sua inicialização como mostrado no exemplo abaixo:
+
+Este parametro será usado como uma password para o "superuser" com o nome de utilizador "postgres" por isso é recomendado meter uma password forte nesta configuração. 
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/535b2c89-af1d-4c6d-ba2e-db69020fae89" width="700" height="400">
 </p>
+
+
+
 Embora não seja necessário é recomendado tambem a instalação do pgAdmin para a administração desta base de dados postgres:
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/24070063-6399-4640-8e9d-ad9910120863" width="450" height="200">
 </p>
 Ao proceder com a implementação do mesmo é favor ter atenção ás variáveis necessárias para a sua inicialização:
+
+É necessário definir um email e password por defeito para fazer login nesta página de gestão como mostrado no exemplo abaixo.
+
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/6090af8f-d831-4492-acd5-632d9984d774" width="500" height="400">
 </p>
 
 Se a configuração estiver feita de forma correta e com o porto 80, será possivel aceder ao PgAdmin a partir [deste Link](http://localhost:80)
+
+A página terá um aspeto semalhante ao abaixo, para entrar na dashboard é preciso usar o email e password definidos no container do pgAdmin:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/087a6795-9cde-42cf-a989-0bc2ac9cb838" width="700" height="400">
+</p>
+
+
 
 ## Carregar Base de Dados
 

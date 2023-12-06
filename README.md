@@ -19,6 +19,9 @@ Para o sistema funcionar *Corretamente* será necessário
 * Um sistema base de dados postgresql
 * Uma aplicação AccuWeather
 
+## Instalação de um sistema PostGreSQL
+Uma base de dados PostGresql será necessária para o correto funcionamento deste trabalho, embora o mesmo não seja obrigatório este será necessário para a gestão do histórico de valores do sistema.
+
 ### Sistema postgresql
 Neste projeto a conexão com a base de dados é feita com a seguinte função em "Main\pred_test.py":
 ```
@@ -33,6 +36,21 @@ def db_connection():
 [...]
 ```
 Será necessário trocar as definições nesta conexão para refletir a base de dados que vai ser usada.
+
+Será demonstrada uma recomendação de como a instalação desta base de dados deve ser feita:
+### Docker
+Docker é uma ferramenta popular de criação de containers para separar as dependencias de uma aplicação para todas as outras facilitando a manutenção e partilha das várias aplicações no mesmo sistema.
+A instalação do mesmo começa no [website official do docker](https://www.docker.com/products/docker-desktop/)
+
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/354e0648-9698-47be-981c-91df78fbfc8c" width="400" height="200">
+
+
+Após concluir a sua instalação e configuração no sistema:
+
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/f26fbab1-29c1-4a83-bea5-b8c2cb1893be" width="350" height="310">
+
+
+
 
 A estrutura da base de dados desenhada para este projeto estará disponivel no ficheiro "Main/BackUp/code.sql"
 

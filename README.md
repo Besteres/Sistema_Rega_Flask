@@ -23,7 +23,7 @@ Para o sistema funcionar *Corretamente* será necessário
 Uma base de dados PostGresql será necessária para o correto funcionamento deste trabalho, embora o mesmo não seja obrigatório este será necessário para a gestão do histórico de valores do sistema.
 
 ### Sistema postgresql
-Neste projeto a conexão com a base de dados é feita com a seguinte função em "Main\pred_test.py":
+Neste projeto a conexão com a base de dados é feita com a seguinte função em ["Main\pred_test.py"](https://github.com/Besteres/Sistema_Rega_Flask/blob/main/Main/pred_test.py):
 ```
 [...]
 def db_connection():
@@ -107,7 +107,7 @@ Para criar uma base de dados nova neste servidor é feito o seguinte:
 
 
 Após esta ser criada podemos importar a estrutura de base de dados para a mesma.
-A estrutura da base de dados desenhada para este projeto estará disponivel no ficheiro "Main/BackUp/code.sql"
+A estrutura da base de dados desenhada para este projeto estará disponivel no ficheiro ["Main/BackUp/code.sql"](https://github.com/Besteres/Sistema_Rega_Flask/blob/main/Main/BackUp/code.sql)
 
 Para executar este ficheiro é preciso abrir um script para a sua query:
 <p align="center">
@@ -128,7 +128,7 @@ Para confirmar que a importação foi feita com sucesso é necessário verificar
 </p>
 
 
-Por fim tenha atenção aos endereços, nomes e contas configuradas para concluir a sua implementação neste projeto, relembrando que a sua configuração está localizada em "Main\pred_test.py"
+Por fim tenha atenção aos endereços, nomes e contas configuradas para concluir a sua implementação neste projeto, relembrando que a sua configuração está localizada em ["Main\pred_test.py"](https://github.com/Besteres/Sistema_Rega_Flask/blob/main/Main/pred_test.py)
 
 ```
 [...]
@@ -171,7 +171,7 @@ O seguinte ficheiro é para ser executado numa terminal, basta inserir o seguint
 Main\LPVirtualEnv\Scripts\activate
 ```
 Onde a seguir com o mesmo será executado o código.
-Para executar o código é recomendado estar localizado no diretório "Main" (Os ficheiros do sistema ficarão guardados no diretório de onde carregar o script)
+Para executar o código é recomendado estar localizado no diretório ["Main"](https://github.com/Besteres/Sistema_Rega_Flask/tree/main/Main) (Os ficheiros do sistema ficarão guardados no diretório de onde carregar o script)
 ```
 cd Main
 ```
@@ -192,5 +192,5 @@ Aqui é onde precisará daquela chave API de uma aplicação AccuWeather:
 
 ## Atenções <a name="avisos"></a>
 * O sistema pode funcionar sem uma conexão á base de dados
-* A configuração de IP e portos está localizado no "Main\main.py"
+* A configuração de IP e portos está localizado no ["Main\main.py"](https://github.com/Besteres/Sistema_Rega_Flask/blob/main/Main/main.py)
 * Uma chave API de uma aplicação AccuWeather é ***obrigatória***

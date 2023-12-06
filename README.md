@@ -1,4 +1,9 @@
 # Sistema_Rega_Flask
+Sistema de rega escrita em python com uma dashboard web usando frameworks como flask, socket-io e até scikit!
+
+![imagem](https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/67eaa2f6-7ec6-43e2-aa8d-9ea692b59515)
+
+
 
 ## Instalação
 
@@ -15,7 +20,8 @@ def db_connection():
         db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password='EpicPassword123')
         return db
     except Exception as e:
-        print("Cant connect to postgres server... not saving " + e)
+        print("Cant connect to postgres server... not saving ")
+        print(e)
 [...]
 ```
 Será necessário trocar estas definições para refletir a base de dados que vai ser usada.

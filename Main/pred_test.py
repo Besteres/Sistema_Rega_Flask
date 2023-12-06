@@ -50,4 +50,5 @@ def db_connection():
         db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password='EpicPassword123')
         return db
     except Exception as e:
-        print("Cant connect to postgres server... not saving " + e)
+        print("Cant connect to postgres server... not saving ")
+        print(e)

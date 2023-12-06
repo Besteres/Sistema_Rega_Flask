@@ -39,15 +39,37 @@ Será necessário trocar as definições nesta conexão para refletir a base de 
 
 Será demonstrada uma recomendação de como a instalação desta base de dados deve ser feita:
 ### Docker
-Docker é uma ferramenta popular de criação de containers para separar as dependencias de uma aplicação para todas as outras facilitando a manutenção e partilha das várias aplicações no mesmo sistema.
+Docker é uma ferramenta popular de criação de containers para separar as dependencias de uma aplicação com todas as outras facilitando a manutenção e partilha das várias aplicações no mesmo sistema.
 A instalação do mesmo começa no [website official do docker](https://www.docker.com/products/docker-desktop/)
-
+<p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/354e0648-9698-47be-981c-91df78fbfc8c" width="400" height="200">
-
+</p>
 
 Após concluir a sua instalação e configuração no sistema:
-
+<p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/f26fbab1-29c1-4a83-bea5-b8c2cb1893be" width="350" height="310">
+</p>
+
+Uma imagem postgres será necessária para executar um container, existem vários tipos destas imagens, mas é recomendada instalar a imagem official distribuida pelo docker:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/2772762f-9d62-4531-86c1-ef604f7db3c7" width="350" height="200">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/f397eedf-cacd-4a6e-bf72-2d545e509b53" width="350" height="200">
+</p>
+Após a sua instalação podemos começar um novo container ao fazer "run" desta imagem em "Images", com atenção aos parametros necessários para a sua inicialização:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/535b2c89-af1d-4c6d-ba2e-db69020fae89" width="700" height="400">
+</p>
+Embora não seja necessário é recomendado tambem a instalação do pgAdmin para a administração desta base de dados postgres:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/24070063-6399-4640-8e9d-ad9910120863" width="450" height="200">
+</p>
+Ao proceder com a implementação do mesmo é favor ter atenção ás variáveis necessárias para a sua inicialização:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/6090af8f-d831-4492-acd5-632d9984d774" width="500" height="400">
+</p>
+
+
+
 
 
 

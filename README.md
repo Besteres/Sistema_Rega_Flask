@@ -68,14 +68,70 @@ Ao proceder com a implementação do mesmo é favor ter atenção ás variáveis
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/6090af8f-d831-4492-acd5-632d9984d774" width="500" height="400">
 </p>
 
+Se a configuração estiver feita de forma correta e com o porto 80, será possivel aceder ao PgAdmin a partir [deste Link](http://localhost:80)
+
+## Carregar Base de Dados
+
+Para adicionar uma conexão á base de dados é feita com o seguinte (A partir do pgAdmin):
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/dddc219a-6a41-4b7a-87dc-87670903f80a" width="350" height="160">
+</p>
+
+Aqui será especificado os parametros de conexão configurados na base de dados postgres:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/78350f45-c554-49b1-b6bb-c0196cb1ff06" width="350" height="200">
+</p>
+
+Para criar uma base de dados nova neste servidor é feito o seguinte:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/82dc1339-7a26-473c-bc50-ba711e371d2e" width="500" height="100">
+</p>
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/b1891c2c-c45c-4cb4-8b53-2d7d676ee201" width="500" height="400">
+</p>
 
 
-
-
-
-
+Após esta ser criada podemos importar a estrutura de base de dados para a mesma.
 A estrutura da base de dados desenhada para este projeto estará disponivel no ficheiro "Main/BackUp/code.sql"
 
+Para executar este ficheiro é preciso abrir um script para a sua query:
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/5fd3edd5-4c10-4b62-93c2-bbf192616c0a" width="420" height="450">
+</p>
+
+E carregar esse script nesta query, depois executando a:
+
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/4d2a7d3b-80e7-414d-8771-d36f0b55724f" width="500" height="400">
+</p>
+
+
+Para confirmar que a importação foi feita com sucesso é necessário verificar se a tabela e as funções estão presentes no schema public, a sua estrutura deverá ser semalhante a esta:
+
+<p align="center">
+<img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/94453623-8c59-46bf-b80d-3b4b1579dd34" width="300" height="360">
+</p>
+
+
+Por fim tenha atenção aos endereços, nomes e contas configuradas para concluir a sua implementação neste projeto, relembrando que a sua configuração está localizada em "Main\pred_test.py"
+
+```
+[...]
+def db_connection():
+    try:
+        db = psycopg2.connect(host="yipiee.sytes.net" , dbname="LP_DB" ,user="postgres" ,password='EpicPassword123')
+        return db
+    except Exception as e:
+        print("Cant connect to postgres server... not saving ")
+        print(e)
+[...]
+```
+* host -> IP do servidor postgresql
+* dbname -> Nome da base de dados criada
+* user -> nome do utilizador com acesso a esta base de dados
+* password -> password definida para o utilizador
+
+O sistema pode funcionar sem uma conexão com a base de dados, mas não é recomendável
 
 ### Aplicação AccuWeather <a name="AplicaçãoAccuWeather"></a>
 Uma conta AccuWeather dev é necessária para criar uma [Aplicação AccuWeather](https://developer.accuweather.com/user/me/apps)

@@ -64,7 +64,7 @@ Este parametro será usado como uma password para o "superuser" com o nome de ut
 
 
 
-Embora não seja necessário é recomendado tambem a instalação do pgAdmin para a administração desta base de dados postgres:
+Embora não seja necessário é recomendado tambem a instalação do pgAdmin para a administração deste servidor postgres:
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/24070063-6399-4640-8e9d-ad9910120863" width="450" height="200">
 </p>
@@ -87,12 +87,12 @@ A página terá um aspeto semalhante ao abaixo, para entrar na dashboard é prec
 
 ## Carregar Base de Dados
 
-Para adicionar uma conexão á base de dados é feita com o seguinte (A partir do pgAdmin):
+Para adicionar uma conexão ao servidor é feita com o seguinte (A partir do pgAdmin):
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/dddc219a-6a41-4b7a-87dc-87670903f80a" width="350" height="160">
 </p>
 
-Aqui será especificado os parametros de conexão configurados na base de dados postgres:
+Aqui será especificado os parametros de conexão, configurados no servidor postgres:
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/78350f45-c554-49b1-b6bb-c0196cb1ff06" width="350" height="200">
 </p>

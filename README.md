@@ -99,7 +99,7 @@ Para executar este ficheiro é preciso abrir um script para a sua query:
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/5fd3edd5-4c10-4b62-93c2-bbf192616c0a" width="420" height="450">
 </p>
 
-E carregar esse script nesta query, depois executando a:
+E carregar esse script nesta query, depois executando este script, clicando no butao "play" ou clicando F5:
 
 <p align="center">
 <img src="https://github.com/Besteres/Sistema_Rega_Flask/assets/76634807/4d2a7d3b-80e7-414d-8771-d36f0b55724f" width="500" height="400">
